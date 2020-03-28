@@ -12,7 +12,7 @@
 
 int main(int argc, char const *argv[]) {
 
-	char message[255], myScore[255];	
+	char message[255], myScore[255];
 	int server, portNumber, score;
 	socklen_t len;
 	struct sockaddr_in servAdd;
@@ -24,15 +24,15 @@ int main(int argc, char const *argv[]) {
 
 	if((server = socket(AF_INET, SOCK_STREAM, 0))<0){
   		fprintf(stderr, "Cannot create socket\n");
-		exit(1); 
+		exit(1);
 	}
 
 	servAdd.sin_family = AF_INET;
-	sscanf(argv[2], "%d", &portNumber); 
+	sscanf(argv[2], "%d", &portNumber);
 	servAdd.sin_port = htons((uint16_t)portNumber);
 
-	if(inet_pton(AF_INET,argv[1],&servAdd.sin_addr) < 0){ 
-		fprintf(stderr, " inet_pton() has failed\n"); 
+	if(inet_pton(AF_INET,argv[1],&servAdd.sin_addr) < 0){
+		fprintf(stderr, " inet_pton() has failed\n");
 		exit(2);
 	}
 
@@ -46,24 +46,22 @@ int main(int argc, char const *argv[]) {
 	//sending player name to server
 	write(server, argv[3], strlen(argv[3])+1);
 
-	//reading message from server
-	if(read(server, message, 255) < 0) {
-   		fprintf(stderr, "read() error\n");
-		exit(3); 
+	while(1){
+
+		//reading message from server
+		if(read(server, message, 255) < 0) {
+   			fprintf(stderr, "read() error\n");
+		exit(3);
+		}
+		printf("%s",message);
+
+		score = (int)time(NULL)%6 + 1;
+		//Converting score from int to char[]
+		sprintf(myScore, "%d", score);
+		printf("%s - Obtained Score: %s\n",argv[3],myScore);
+		strcpy(message,myScore);
+
+		//sending score to server
+		write(server, message, strlen(message)+1);
 	}
-	printf("%s",message);
-
-	
-	score = 10;
-	//Converting score from int to char[]
-	sprintf(myScore, "%d", score);
-	printf("%s - Obtained score: %s\n",argv[3],myScore);
-	strcpy(message,myScore);
-
-	//sending score to server
-	write(server, message, strlen(message)+1);
-
-
-
 }
-
