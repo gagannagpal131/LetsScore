@@ -10,12 +10,15 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
-int main(int argc, char const *argv[]) {	
-	int server, portNumber; socklen_t len;
+int main(int argc, char const *argv[]) {
+
+	char message[255], myScore[255];	
+	int server, portNumber, score;
+	socklen_t len;
 	struct sockaddr_in servAdd;
 
- 	if(argc != 3){
-  		printf("Call model:%s <IP> <Port#>\n",argv[0]);
+ 	if(argc != 4){
+  		printf("Call model:%s <IP> <Port#> <Player Name>\n",argv[0]);
   		exit(0);
 	}
 
@@ -38,7 +41,28 @@ int main(int argc, char const *argv[]) {
 		exit(3);
 	}
 
-	printf("Player Connected to Server!!\n");
+	printf("%s - Player Connected to Server!!\n", argv[3]);
+
+	//sending player name to server
+	write(server, argv[3], strlen(argv[3])+1);
+
+	//reading message from server
+	if(read(server, message, 255) < 0) {
+   		fprintf(stderr, "read() error\n");
+		exit(3); 
+	}
+	printf("%s",message);
+
+	
+	score = 10;
+	//Converting score from int to char[]
+	sprintf(myScore, "%d", score);
+	printf("%s - Obtained score: %s\n",argv[3],myScore);
+	strcpy(message,myScore);
+
+	//sending score to server
+	write(server, message, strlen(message)+1);
+
 
 
 }
