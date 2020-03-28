@@ -11,6 +11,7 @@
 #include <arpa/inet.h>
 
 void servicePlayers(int, int);
+void checkScore(int[], int, int);
 
 int main(int argc, char const *argv[])
 {
@@ -36,7 +37,7 @@ int main(int argc, char const *argv[])
 	bind(sd,(struct sockaddr*)&servAdd,sizeof(servAdd));
 	listen(sd, 5);
 
-	printf("Waiting for players!\n");
+	printf("\nWaiting for players!\n");
 
 	while(1){
 
@@ -46,7 +47,7 @@ int main(int argc, char const *argv[])
 		client2=accept(sd,(struct sockaddr*)NULL,NULL);
 		printf("Player Connected\n");
 
-		printf("Two players connected, Let the game begin\n\n");
+		printf("\nTwo players connected, Let the game begin\n");
 		pid = fork();
 		if(pid == 0)
 			servicePlayers(client1, client2);
@@ -83,10 +84,10 @@ void servicePlayers(int client1, int client2){
 
 	while(1){
 
-		printf("\n\n-----------------------------------------------\n");
+		printf("\n\n-----------------------------------------------\n\n");
 
 		//sending message to player 1
-		strcpy(message, "\nReferee - You can now play!\n");
+		strcpy(message,"\nYou can now play\n");
 		write(client1, message, strlen(message)+1);
 
 		//reading score from player 1
@@ -102,8 +103,9 @@ void servicePlayers(int client1, int client2){
 		printf("%s - Total Score = %d\n",player1,totalScore[0]);
 		sleep(1);
 
+
 		//sending message to player 2
-		strcpy(message, "\nReferee: You can now play!\n");
+		strcpy(message, "\nYou can now play\n");
 		write(client2, message, strlen(message)+1);
 
 		//reading score from player 2
@@ -119,9 +121,43 @@ void servicePlayers(int client1, int client2){
 		printf("%s - Total Score = %d\n",player2,totalScore[1]);
 		sleep(1);
 
+
+		checkScore(totalScore,client1,client2);
+
 	}
 
-	close(client1);
-	close(client2);
+}
+
+void checkScore(int totalScore[], int client1, int client2){
+
+	char message[255];
+
+	if (totalScore[0] >= 20){
+
+		strcpy(message, "\nGame over: you won the game\n");
+		write(client1, message, strlen(message)+1);
+
+		strcpy(message, "\nGame over: you lost the game\n");
+		write(client2, message, strlen(message)+1);
+
+		close(client1);
+		close(client2);
+		exit(0);
+
+	}
+
+	if(totalScore[1] >= 20){
+
+		strcpy(message, "\nGame over: you won the game\n");
+		write(client2, message, strlen(message)+1);
+
+		strcpy(message, "\nGame over: you lost the game\n");
+		write(client1, message, strlen(message)+1);
+
+		close(client1);
+		close(client2);
+		exit(0);
+
+	}
 
 }

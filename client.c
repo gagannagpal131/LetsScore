@@ -51,17 +51,36 @@ int main(int argc, char const *argv[]) {
 		//reading message from server
 		if(read(server, message, 255) < 0) {
    			fprintf(stderr, "read() error\n");
-		exit(3);
+			exit(3);
 		}
-		printf("%s",message);
 
-		score = (int)time(NULL)%6 + 1;
-		//Converting score from int to char[]
-		sprintf(myScore, "%d", score);
-		printf("%s - Obtained Score: %s\n",argv[3],myScore);
-		strcpy(message,myScore);
+		if((strcmp(message,"\nYou can now play\n") == 0)){
 
-		//sending score to server
-		write(server, message, strlen(message)+1);
+				printf("%s",message);
+				score = (int)time(NULL)%6 + 1;
+
+				//Converting score from int to char[]
+				sprintf(myScore, "%d", score);
+				printf("%s - Obtained Score: %s\n",argv[3],myScore);
+				strcpy(message,myScore);
+
+				//sending score to server
+				write(server, message, strlen(message)+1);
+		}
+
+		if ((strcmp(message,"\nGame over: you won the game\n") == 0)){
+
+			printf("\nI won the game\n\n");
+			close(server);
+			exit(0);
+		}
+
+		if ((strcmp(message,"\nGame over: you lost the game\n") == 0)){
+
+			printf("\nI lost the game\n\n");
+			close(server);
+			exit(0);
+		}
+
 	}
 }
