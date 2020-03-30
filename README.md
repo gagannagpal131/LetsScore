@@ -13,15 +13,15 @@
 
 * `Change to "LetsScore" as the current directory`
 
+* `Open 3 Terminal windows`
+
 * `gcc server.c -o server`
 
 * `gcc client.c -o client`
 
-* `Open 3 Terminal windows`
-
 * `./server <Port #>`
 
-* `Execute ./client on 2 Terminal windows (one for each player)`
+* `./client on 2 Terminal windows (one for each player)`
 
 * `./client <IP> <Port #> <Player Name>`
 
