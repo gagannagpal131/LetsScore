@@ -27,10 +27,10 @@
 
 ## Screenshots
 
-<img src="https://github.com/gagannagpal131/LetsScore/blob/master/screenshots/server-client1.png" width="650">
+<img src="https://github.com/gagannagpal131/LetsScore/blob/master/screenshots/ss1.png" width="650">
 
-<img src="https://github.com/gagannagpal131/LetsScore/blob/master/screenshots/server-client2.png" width="650">
+<img src="https://github.com/gagannagpal131/LetsScore/blob/master/screenshots/ss2.png" width="650">
 
-<img src="https://github.com/gagannagpal131/LetsScore/blob/master/screenshots/client2-winner.png" width="650">
+<img src="https://github.com/gagannagpal131/LetsScore/blob/master/screenshots/ss3.png" width="650">
 
-<img src="https://github.com/gagannagpal131/LetsScore/blob/master/screenshots/client-1-loser.png" width="650">
+<img src="https://github.com/gagannagpal131/LetsScore/blob/master/screenshots/ss4.png" width="650">

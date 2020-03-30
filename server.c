@@ -40,13 +40,13 @@ int main(int argc, char const *argv[])
 	bind(sd,(struct sockaddr*)&servAdd,sizeof(servAdd));
 	listen(sd, 5);
 
-	while(1){
+	printf("\nWaiting for players!\n");
 
-		printf("\nWaiting for players!\n");
+	while(1){
 
 		//waiting for player 1
 		client1=accept(sd,(struct sockaddr*)NULL,NULL);
-    	printf("Player Connected\n");
+    		printf("Player Connected\n");
 
 		//waiting for player 2
 		client2=accept(sd,(struct sockaddr*)NULL,NULL);
@@ -157,6 +157,8 @@ void checkScore(int totalScore[], int client1, int client2){
 
 		close(client1);
 		close(client2);
+
+		printf("\nWaiting for 2 new players to Connect!\n");
 		exit(0);
 	}
 
@@ -171,6 +173,9 @@ void checkScore(int totalScore[], int client1, int client2){
 
 		close(client1);
 		close(client2);
+
+		printf("\nWaiting for 2 new players to Connect!\n");
 		exit(0);
 	}
 }
+
