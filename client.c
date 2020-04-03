@@ -33,13 +33,13 @@ int main(int argc, char const *argv[]) {
 	sscanf(argv[2], "%d", &portNumber);
 	servAdd.sin_port = htons((uint16_t)portNumber);
 
-	//representing
+	//converting IPV4 address from presentation to network format
 	if(inet_pton(AF_INET,argv[1],&servAdd.sin_addr) < 0){
 		fprintf(stderr, " inet_pton() has failed\n");
 		exit(2);
 	}
 
-	//Connecting to ther server
+	//Connecting to the server
 	if(connect(server,(struct sockaddr *)&servAdd,sizeof(servAdd)) < 0){
  		fprintf(stderr, "connect() has failed, exiting\n");
 		exit(3);
@@ -52,7 +52,7 @@ int main(int argc, char const *argv[]) {
 
 	while(1){
 
-		printf("\n-----------------------------------------------\n");
+		printf("\n-----------------------------------------------\n\n");
 
 		//reading message from server
 		if(read(server, message, 255) < 0) {
@@ -61,34 +61,34 @@ int main(int argc, char const *argv[]) {
 		}
 
 		//Player can roll the dice
-		if((strcmp(message,"\nYou can now play\n") == 0)){
+		if((strcmp(message,"You can now play") == 0)){
 
-				printf("%s",message);
+			printf("%s",message);
 
-				//generation of random numbers
-				score = (int)time(NULL)%6 + 1;
+			//generation of random numbers
+			score = (int)time(NULL)%6 + 1;
 
-				//Converting score from int to char[]
-				sprintf(myScore, "%d", score);
-				printf("%s - Obtained Score: %s\n",argv[3],myScore);
-				strcpy(message,myScore);
+			//Converting score from int to char[]
+			sprintf(myScore, "%d", score);
+			printf("\n%s - Obtained Score: %s\n",argv[3],myScore);
+			strcpy(message,myScore);
 
-				//sending score to server
-				write(server, message, strlen(message)+1);
+			//sending score to server
+			write(server, message, strlen(message)+1);
 		}
 
 		//player wins the game
-		if((strcmp(message,"\nGame over: you won the game\n") == 0)){
+		if((strcmp(message,"Game over: you won the game") == 0)){
 
-			printf("\nI won the game\n\n");
+			printf("I won the game\n\n");
 			close(server);
 			exit(0);
 		}
 
 		//player lost the game
-		if((strcmp(message,"\nGame over: you lost the game\n") == 0)){
+		if((strcmp(message,"Game over: you lost the game") == 0)){
 
-			printf("\nI lost the game\n\n");
+			printf("I lost the game\n\n");
 			close(server);
 			exit(0);
 		}

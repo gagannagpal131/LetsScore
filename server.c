@@ -10,8 +10,8 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
-void servicePlayers(int, int);
-void checkScore(int[], int, int);
+void servicePlayers(int,int);
+void checkScore(int[],int,int,char[],char[]);
 
 int main(int argc, char const *argv[])
 {
@@ -20,8 +20,8 @@ int main(int argc, char const *argv[])
 	struct sockaddr_in servAdd;
 
  	if(argc != 2){
-    	printf("Call model: %s <Port #>\n", argv[0]);
-    	exit(0);
+    		printf("Call model: %s <Port #>\n", argv[0]);
+    		exit(0);
 	}
 
 	//creation of socket sd
@@ -79,15 +79,15 @@ void servicePlayers(int client1, int client2){
 
 	//reading the name of player 1
 	if(!read(client1, player1, 100)){
-    	close(client1);
-    	fprintf(stderr,"Unable to receive data from client\n");
-		exit(0);
+    		close(client1);
+    		fprintf(stderr,"Unable to receive data from client\n");
+		exit(0);  
 	}
 
 	//reading the name of player 2
 	if(!read(client2, player2, 100)){
-    	close(client1);
-    	fprintf(stderr,"Unable to receive data from client\n");
+    		close(client1);
+    		fprintf(stderr,"Unable to receive data from client\n");
 		exit(0);
 	}
 
@@ -97,16 +97,16 @@ void servicePlayers(int client1, int client2){
 
 	while(1){
 
-		printf("\n\n-----------------------------------------------\n\n");
+		printf("\n-----------------------------------------------\n\n");
 
 		//sending message to player 1
-		strcpy(message,"\nYou can now play\n");
+		strcpy(message,"You can now play");
 		write(client1, message, strlen(message)+1);
 
 		//reading score from player 1
 		if(!read(client1, message, 255)){
-    		close(client1);
-    		fprintf(stderr,"Unable to receive data from client\n");
+    			close(client1);
+    			fprintf(stderr,"Unable to receive data from client\n");
 			exit(0);
 		}
 
@@ -117,13 +117,13 @@ void servicePlayers(int client1, int client2){
 		sleep(1);
 
 		//sending message to player 2
-		strcpy(message, "\nYou can now play\n");
+		strcpy(message, "You can now play");
 		write(client2, message, strlen(message)+1);
 
 		//reading score from player 2
 		if(!read(client2, message, 255)){
-    		close(client2);
-    		fprintf(stderr,"Unable to receive data from client\n");
+    			close(client2);
+    			fprintf(stderr,"Unable to receive data from client\n");
 			exit(0);
 		}
 
@@ -134,48 +134,50 @@ void servicePlayers(int client1, int client2){
 		sleep(1);
 
 		//checking if any player has won the game
-		checkScore(totalScore,client1,client2);
+		checkScore(totalScore, client1, client2, player1, player2);
 	}
 }
 
 /*
 Function to check score of both players and check the winners.
-Total score of both players and file descriptors of both clients are passed.
+Total score of both players and file descriptors of both clients are passed as parameters.
 */
-void checkScore(int totalScore[], int client1, int client2){
+void checkScore(int totalScore[], int client1, int client2, char player1[], char player2[]){
 
 	char message[255];
+	int maxScore = 100;
 
 	//Player 1 Wins
-	if (totalScore[0] >= 100){
+	if (totalScore[0] >= maxScore){
 
-		strcpy(message, "\nGame over: you won the game\n");
+		strcpy(message, "Game over: you won the game");
 		write(client1, message, strlen(message)+1);
 
-		strcpy(message, "\nGame over: you lost the game\n");
+		strcpy(message, "Game over: you lost the game");
 		write(client2, message, strlen(message)+1);
 
 		close(client1);
 		close(client2);
 
+		printf("\n%s won the game!\n",player1);
 		printf("\nWaiting for 2 new players to Connect!\n");
 		exit(0);
 	}
 
 	//Player 2 wins
-	if(totalScore[1] >= 100){
+	if(totalScore[1] >= maxScore){
 
-		strcpy(message, "\nGame over: you won the game\n");
+		strcpy(message, "Game over: you won the game");
 		write(client2, message, strlen(message)+1);
 
-		strcpy(message, "\nGame over: you lost the game\n");
+		strcpy(message, "Game over: you lost the game");
 		write(client1, message, strlen(message)+1);
 
 		close(client1);
 		close(client2);
 
+		printf("\n%s won the game!\n",player2);
 		printf("\nWaiting for 2 new players to Connect!\n");
 		exit(0);
 	}
 }
-

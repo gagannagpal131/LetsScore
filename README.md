@@ -9,7 +9,7 @@
 
 ## Steps to Run
 
-* `Clone https://github.com/gagannagpal131/LetsScore`
+* `Clone https://github.com/gagannagpal131/LetsScore.git`
 
 * `Change to "LetsScore" as the current directory`
 
